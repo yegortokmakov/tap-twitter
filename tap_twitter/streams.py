@@ -44,7 +44,22 @@ class TweetsStream(TwitterStream):
         "username",
         "public_metrics",
     ]
-    expansions: List[str] = ["author_id"]
+    media_fields: List[str] = [
+        "duration_ms",
+        "height",
+        "media_key",
+        "preview_image_url",
+        "type",
+        "url",
+        "width",
+        "public_metrics",
+        "non_public_metrics",
+        "organic_metrics",
+        "promoted_metrics",
+        "alt_text",
+        "variants",
+    ]
+    expansions: List[str] = ["author_id","attachments.media_keys"]
 
     def parse_response(self, response: requests.Response) -> Iterable[dict]:
         record = response.json()
@@ -53,6 +68,8 @@ class TweetsStream(TwitterStream):
         else:
             users_lookup = None
         for i, tweet in enumerate(record.get("data", [])):
+            if "includes" in record.keys():
+                tweet["includes"] = record["includes"]
             if users_lookup:
                 tweet["expansion__author_id"] = users_lookup[tweet["author_id"]]
             else:
@@ -80,7 +97,8 @@ class TweetsStream(TwitterStream):
             "query": self.make_query(),
             "tweet.fields": ",".join(self.tweet_fields),
             "expansions": ",".join(self.expansions),
-            "user.fields": ",".join(self.user_fields)
+            "user.fields": ",".join(self.user_fields),
+            "media.fields": ",".join(self.media_fields),
         }
 
 
