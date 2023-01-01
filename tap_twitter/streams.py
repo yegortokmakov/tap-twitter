@@ -80,14 +80,12 @@ class TweetsStream(TwitterStream):
         user_ids = self.config.get("user_ids")
         url_patterns = self.config.get("url_patterns")
         from_filter = " OR ".join([f"from:{user_id}" for user_id in user_ids])
-        to_filter = " OR ".join([f"to:{user_id}" for user_id in user_ids])
-        retweet_filter = " OR ".join([f"retweets_of:{user_id}" for user_id in user_ids])
 
         if url_patterns:
             url_filter = " OR ".join([f"url:{url_pattern}" for url_pattern in url_patterns])
-            query_elements = [from_filter, to_filter, retweet_filter, url_filter]
+            query_elements = [from_filter, url_filter]
         else:
-            query_elements = [from_filter, to_filter, retweet_filter]
+            query_elements = [from_filter]
 
         return " OR ".join(query_elements)
 
