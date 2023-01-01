@@ -96,65 +96,57 @@
         }
       }
     },
-    "includes": {
+    "media": {
       "type": [
         "null",
-        "object"
+        "array"
       ],
-      "properties": {
-        "media": {
-          "type": [
-            "null",
-            "array"
-          ],
-          "items": {
+      "items": {
+        "type": [
+          "null",
+          "object"
+        ],
+        "properties": {
+          "media_key": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "type": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "url": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "duration_ms": {
+            "type": [
+              "null",
+              "integer"
+            ]
+          },
+          "public_metrics": {
             "type": [
               "null",
               "object"
             ],
             "properties": {
-              "media_key": {
-                "type": [
-                  "null",
-                  "string"
-                ]
-              },
-              "type": {
-                "type": [
-                  "null",
-                  "string"
-                ]
-              },
-              "url": {
-                "type": [
-                  "null",
-                  "string"
-                ]
-              },
-              "duration_ms": {
+              "view_count": {
                 "type": [
                   "null",
                   "integer"
                 ]
-              },
-              "public_metrics": {
-                "type": [
-                  "null",
-                  "object"
-                ],
-                "properties": {
-                  "view_count": {
-                    "type": [
-                      "null",
-                      "integer"
-                    ]
-                  }
-                }
               }
             }
-          }    
+          }
         }
-      }
+      }    
     },
     "referenced_tweets": {
       "type": [

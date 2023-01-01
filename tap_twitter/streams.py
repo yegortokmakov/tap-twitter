@@ -57,23 +57,29 @@ class TweetsStream(TwitterStream):
         "organic_metrics",
         "promoted_metrics",
         "alt_text",
-        "variants",
+        # "variants",
     ]
     expansions: List[str] = ["author_id","attachments.media_keys"]
 
     def parse_response(self, response: requests.Response) -> Iterable[dict]:
         record = response.json()
         if "includes" in record.keys():
-            users_lookup = {user["id"]: user for user in record["includes"]["users"]}
+            if "users" in record["includes"]:
+                users_lookup = {user["id"]: user for user in record["includes"]["users"]}
+            if "media" in record["includes"]:
+                media_lookup = {media["media_key"]: media for media in record["includes"]["media"]}
         else:
             users_lookup = None
+            media_lookup = None
         for i, tweet in enumerate(record.get("data", [])):
-            if "includes" in record.keys():
-                tweet["includes"] = record["includes"]
             if users_lookup:
                 tweet["expansion__author_id"] = users_lookup[tweet["author_id"]]
             else:
                 tweet["expansion__author_id"] = None
+            if media_lookup and "attachments" in tweet and "media_keys" in tweet["attachments"]:
+                tweet["media"] = [value for key, value in media_lookup.items() if key in tweet["attachments"]["media_keys"]]
+            else:
+                tweet["media"] = None
             yield tweet
 
     def make_query(self) -> str:
